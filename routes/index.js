@@ -6,6 +6,8 @@ var router = express.Router()
 var android_group = require('./android/group');
 var music = require('./usertest/music');
 var answer = require('./usertest/answer');
+var ranking = require('./usertest/ranking');
+
 
 
 
@@ -22,6 +24,8 @@ router.get('/', function(req, res, next) {
 router.use('/android/group', android_group);
 router.use('/music', music);
 router.use('/answer', answer);
+router.use('/ranking', ranking);
+
 
 
 
