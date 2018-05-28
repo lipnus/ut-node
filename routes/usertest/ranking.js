@@ -40,7 +40,7 @@ router.post('/', function(req,res){
 
 			let obj = {
 				user_pk: rows[i].pk,
-				name: rows[i].name,
+				nickname: rows[i].nickname,
 				score: rows[i].score
 			};
 

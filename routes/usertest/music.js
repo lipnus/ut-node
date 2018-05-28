@@ -28,41 +28,80 @@ router.post('/', function(req,res){
 	let user_pk = req.body.user_pk;
 	let music_pk = req.body.music_pk;
 
-
+	//요청받은 음원정보 제공
 	if(music_pk > 0){
-		//요청받은 음원정보 제공
 		var sql = 'SELECT * FROM `music` WHERE pk=?';
 		var factor = [music_pk];
-	}else{
-		//음원을 출제한다
-		var sql = 'SELECT * FROM `music` WHERE 1';
-		var factor = [];
+		var query = connection.query(sql, factor, function(err, rows){
+			if(err) throw err;
+
+			let i=0;
+			responseData = {};
+			// console.log(i + "/ " + rows[i].pk);
+			responseData.music_pk= rows[i].pk;
+			responseData.music_name= rows[i].music_name;
+			responseData.music_path= rows[i].music_path;
+			responseData.youtube= rows[i].youtube;
+			responseData.musician= rows[i].musician;
+			responseData.album= rows[i].album;
+			responseData.album_name= rows[i].album_name;
+			responseData.date= rows[i].date;
+			responseData.genre= rows[i].genre;
+
+			res.json( responseData );
+
+		});//sql
 	}
 
-	var query = connection.query(sql, factor, function(err, rows){
-		if(err) throw err;
+	else{ //특별히 요청받은 게 없는 경우 순서대로 음원을 출제한다
+
+		var sql = 'SELECT * FROM `music` WHERE 1';
+		var factor = [];
+		var query = connection.query(sql, factor, function(err, rows){
+			if(err) throw err;
+
+			//사용자가 진행했던 것을 참고하여 다음 음원을 제공
+			var sql = 'SELECT * FROM `user` WHERE pk=?';
+			var factor = [user_pk];
+			var query = connection.query(sql, factor, function(err, rows2){
+				if(err) throw err;
 
 
+				let responseData = {result:"ok"};
 
-		if(music_pk==0){ var i = Math.floor(Math.random() * rows.length) + 0;}
-		else{var i=0;}
+				//문제가 다 떨어진 경우
+				if(rows2[0].game_count >= rows.length){
+					responseData.result="runout";
+					res.json( responseData );
+				}else{
+
+					//정상출제
+					let i = rows2[0].game_count;
+					responseData.music_pk= rows[i].pk;
+					responseData.music_name= rows[i].music_name;
+					responseData.music_path= rows[i].music_path;
+					responseData.youtube= rows[i].youtube;
+					responseData.musician= rows[i].musician;
+					responseData.album= rows[i].album;
+					responseData.album_name= rows[i].album_name;
+					responseData.date= rows[i].date;
+					responseData.genre= rows[i].genre;
+
+					//유저정보 기록(반응 필요없음)
+					sql = 'UPDATE user SET game_count = game_count+1 where pk=?';
+					factor = [user_pk];
+					query = connection.query(sql, factor, function(err, rows){
+						if(err) throw err;
+						res.json( responseData );
+					});//sql(update)
+
+				}
 
 
-		responseData = {};
-		// console.log(i + "/ " + rows[i].pk);
-		responseData.music_pk= rows[i].pk;
-		responseData.music_name= rows[i].music_name;
-		responseData.music_path= rows[i].music_path;
-		responseData.youtube= rows[i].youtube;
-		responseData.musician= rows[i].musician;
-		responseData.album= rows[i].album;
-		responseData.album_name= rows[i].album_name;
-		responseData.date= rows[i].date;
-		responseData.genre= rows[i].genre;
+			});
+		});//sql
+	}
 
-		res.json( responseData );
-
-	});//sql
 });//post
 
 
