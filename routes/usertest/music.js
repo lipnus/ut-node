@@ -87,6 +87,7 @@ router.post('/', function(req,res){
 					responseData.date= rows[i].date;
 					responseData.genre= rows[i].genre;
 
+					console.log("user_pk: " + user_pk);
 					//유저정보 기록(반응 필요없음)
 					sql = 'UPDATE user SET game_count = game_count+1 where pk=?';
 					factor = [user_pk];
@@ -95,9 +96,7 @@ router.post('/', function(req,res){
 						res.json( responseData );
 					});//sql(update)
 
-				}
-
-
+				}//if
 			});
 		});//sql
 	}
