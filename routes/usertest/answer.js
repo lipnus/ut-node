@@ -37,40 +37,33 @@ router.post('/', function(req,res){
 	var query = connection.query(sql, factor, function(err, rows){
 		if(err) throw err;
 
-		let responseData = {result:"wrong", score:0};
+		var responseData = {result:"wrong", score:0};
+		if(try_count==1){ responseData.score=3; }
+		else if(try_count == 2){ responseData.score=2; }
+		else{ responseData.score=1;}
 
-		if(rows.length > 0){
-			console.log("answer: " + answer + " / " + rows[0].music_name);
+		if( rows[0].name_answer.indexOf(answer) != -1 ){
+			console.log("정답!: ", rows[0].name_answer);
 
-			if( rows[0].name_answer.indexOf(answer) != -1 ){
-				responseData.result = "correct";
-
-				if(try_count==1){ responseData.score=3; }
-				else if(try_count == 2){ responseData.score=2; }
-				else{ responseData.score=1;}
-
-				//기록만 하고 따로 응답은 받지 않음
-				sql = 'insert into history set ?';
-				factor = {user_pk:user_pk, music_pk:music_pk,	answer:answer, try_count:try_count};
-				query = connection.query(sql, factor, function(err,rows) {
-					if(err) throw err;
-				})//sql
-
-
-				sql = 'UPDATE user SET nickname=?, mobile=?, sns=?, introduce=? WHERE token=?';
-				factor = [nickname, mobile, sns, introduce, token];
+				sql = 'UPDATE user SET game_count = game_count+1 where pk=?';
+				factor = [user_pk];
 				query = connection.query(sql, factor, function(err, rows){
-
 					if(err) throw err;
-					responseData.result="success";
+					responseData.result="correct";
 					res.json( responseData );
-				});
+				});//sql(update)
 
-			}
-		}//if
+		}else{//오답
+
+			sql = 'insert into history set ?';
+			factor = {user_pk:user_pk, music_pk:music_pk,	answer:answer, try_count:try_count};
+			query = connection.query(sql, factor, function(err,rows) {
+				if(err) throw err;
+			res.json( responseData );
+			})//sql(insert)
+		}
 
 
-		res.json( responseData );
 
 	});//sql
 });//post

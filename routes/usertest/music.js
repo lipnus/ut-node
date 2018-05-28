@@ -49,7 +49,7 @@ router.post('/', function(req,res){
 
 
 		responseData = {};
-		console.log(i + "/ " + rows[i].pk);
+		// console.log(i + "/ " + rows[i].pk);
 		responseData.music_pk= rows[i].pk;
 		responseData.music_name= rows[i].music_name;
 		responseData.music_path= rows[i].music_path;
