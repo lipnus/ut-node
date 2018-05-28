@@ -31,7 +31,7 @@ router.post('/', function(req,res){
 	let answer = req.body.answer;
 	let try_count = req.body.try_count;
 
-	//음원을 출제한다
+	//답안체크
 	var sql = 'SELECT * FROM `music` WHERE pk=?';
 	var factor = [music_pk];
 	var query = connection.query(sql, factor, function(err, rows){
@@ -41,12 +41,31 @@ router.post('/', function(req,res){
 
 		if(rows.length > 0){
 			console.log("answer: " + answer + " / " + rows[0].music_name);
-			if(answer == rows[0].music_name){
+
+			if( rows[0].name_answer.indexOf(answer) != -1 ){
 				responseData.result = "correct";
 
 				if(try_count==1){ responseData.score=3; }
 				else if(try_count == 2){ responseData.score=2; }
 				else{ responseData.score=1;}
+
+				//기록만 하고 따로 응답은 받지 않음
+				sql = 'insert into history set ?';
+				factor = {user_pk:user_pk, music_pk:music_pk,	answer:answer, try_count:try_count};
+				query = connection.query(sql, factor, function(err,rows) {
+					if(err) throw err;
+				})//sql
+
+
+				sql = 'UPDATE user SET nickname=?, mobile=?, sns=?, introduce=? WHERE token=?';
+				factor = [nickname, mobile, sns, introduce, token];
+				query = connection.query(sql, factor, function(err, rows){
+
+					if(err) throw err;
+					responseData.result="success";
+					res.json( responseData );
+				});
+
 			}
 		}//if
 

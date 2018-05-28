@@ -7,6 +7,8 @@ var android_group = require('./android/group');
 var music = require('./usertest/music');
 var answer = require('./usertest/answer');
 var ranking = require('./usertest/ranking');
+var user = require('./usertest/user');
+
 
 
 
@@ -25,6 +27,8 @@ router.use('/android/group', android_group);
 router.use('/music', music);
 router.use('/answer', answer);
 router.use('/ranking', ranking);
+router.use('/user', user);
+
 
 
 

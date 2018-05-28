@@ -26,30 +26,22 @@ router.get('/', function(req, res){
 
 router.post('/', function(req,res){
 
-	let user_pk = req.body.user_pk;
+	let name = req.body.name;
+	let nickname = req.body.nickname;
+	let contact = req.body.contact;
+	let age = req.body.age;
 
-	//유저데이터를 점수에 따라 출력
-	var sql = 'SELECT * FROM `user` WHERE 1 ORDER BY score DESC';
-	var factor = [];
-	var query = connection.query(sql, factor, function(err, rows){
+	sql = 'insert into user set ?';
+	factor = {name:name, nickname:nickname,	contact:contact, age:age};
+	query = connection.query(sql, factor, function(err,rows) {
 		if(err) throw err;
 
-		let responseData = [];
-		for(let i=0; i<rows.length; i++){
+		responseData={};
+		responseData.result="success";
+		res.json(responseData)
+	})//sql
 
-
-			let obj = {
-				user_pk: rows[i].pk,
-				name: rows[i].name,
-				score: rows[i].score
-			};
-
-			responseData.push(obj);
-		}//for
-
-		res.json( responseData );
-
-	});//sql
 });//post
+
 
 module.exports = router;
