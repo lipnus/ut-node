@@ -9,6 +9,8 @@ var answer = require('./usertest/answer');
 var ranking = require('./usertest/ranking');
 var user = require('./usertest/user');
 var score = require('./usertest/score');
+var auth_naver = require('./usertest/auth_naver');
+
 
 
 
@@ -31,6 +33,8 @@ router.use('/answer', answer);
 router.use('/ranking', ranking);
 router.use('/user', user);
 router.use('/score', score);
+router.use('/auth_naver', auth_naver);
+
 
 
 
