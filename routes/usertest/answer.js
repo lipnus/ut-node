@@ -26,7 +26,7 @@ router.get('/', function(req, res){
 
 router.post('/', function(req,res){
 
-	let user_pk = req.body.user_pk;
+	let naver_id = req.body.naver_id;
 	let music_pk = req.body.music_pk;
 	let answer = req.body.answer;
 	let try_count = req.body.try_count;
@@ -62,7 +62,7 @@ router.post('/', function(req,res){
 
 			//오답기록
 			sql = 'insert into history set ?';
-			factor = {user_pk:user_pk, music_pk:music_pk,	answer:answer, try_count:try_count};
+			factor = {naver_id:naver_id, music_pk:music_pk,	answer:answer, try_count:try_count};
 			query = connection.query(sql, factor, function(err,rows) {
 				if(err) throw err;
 			res.json( responseData );
@@ -76,7 +76,7 @@ router.post('/', function(req,res){
 function recordHistory(req, res){
 
 	console.log("데이터카운트");
-	let user_pk = req.body.user_pk;
+	let naver_id = req.body.naver_id;
 	let music_pk = req.body.music_pk;
 	let answer = req.body.answer;
 	let try_count = req.body.try_count;

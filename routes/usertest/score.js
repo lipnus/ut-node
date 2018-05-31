@@ -26,20 +26,20 @@ router.get('/', function(req, res){
 
 router.post('/', function(req,res){
 
-	let user_pk = req.body.user_pk;
+	let naver_id = req.body.naver_id;
 	let score = req.body.score;
 
-	console.log("user_pk: " + user_pk + " / score: " + score );
+	console.log("naver_id: " + naver_id + " / score: " + score );
 
 	//점수를 올려줌
-	sql = 'UPDATE user SET score=score+? where pk=?';
-	factor = [score, user_pk];
+	sql = 'UPDATE user SET score=score+? where naver_id=?';
+	factor = [score, naver_id];
 	query = connection.query(sql, factor, function(err, rows){
 		if(err) throw err;
 
 		//순위를 알려줌
-		var sql = 'SELECT (count(*)+1) AS rank FROM `user` WHERE score > (SELECT score FROM `user` WHERE pk=?)';
-		var factor = [user_pk];
+		var sql = 'SELECT (count(*)+1) AS rank FROM `user` WHERE score > (SELECT score FROM `user` WHERE naver_id=?)';
+		var factor = [naver_id];
 		var query = connection.query(sql, factor, function(err, rows){
 			if(err) throw err;
 

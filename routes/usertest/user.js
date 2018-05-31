@@ -23,16 +23,22 @@ router.get('/', function(req, res){
 });
 
 
-
+//유저를 DB에 등록
 router.post('/', function(req,res){
 
+	let naver_id = req.body.naver_id;
 	let name = req.body.name;
 	let nickname = req.body.nickname;
 	let contact = req.body.contact;
 	let age = req.body.age;
+	let profile = req.body.profile;
+
+	let gender = req.body.gender;
+
 
 	sql = 'insert into user set ?';
-	factor = {name:name, nickname:nickname,	contact:contact, age:age};
+	factor = {naver_id:naver_id, name:name, nickname:nickname, contact:contact, age:age,
+	profile:profile, gender:gender};
 	query = connection.query(sql, factor, function(err,rows) {
 		if(err) throw err;
 

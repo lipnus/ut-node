@@ -25,8 +25,10 @@ router.get('/', function(req, res){
 
 
 router.post('/', function(req,res){
-	let user_pk = req.body.user_pk;
+	let naver_id = req.body.naver_id;
 	let music_pk = req.body.music_pk;
+
+	console.log("네이버아이디:"+ naver_id);
 
 	//요청받은 음원정보 제공
 	if(music_pk > 0){
@@ -61,8 +63,8 @@ router.post('/', function(req,res){
 			if(err) throw err;
 
 			//사용자가 진행했던 것을 참고하여 다음 음원을 제공
-			var sql = 'SELECT * FROM `user` WHERE pk=?';
-			var factor = [user_pk];
+			var sql = 'SELECT * FROM `user` WHERE naver_id=?';
+			var factor = [naver_id];
 			var query = connection.query(sql, factor, function(err, rows2){
 				if(err) throw err;
 
@@ -87,10 +89,10 @@ router.post('/', function(req,res){
 					responseData.date= rows[i].date;
 					responseData.genre= rows[i].genre;
 
-					console.log("user_pk: " + user_pk);
+					console.log("네이버아이디: " + naver_id);
 					//유저정보 기록(반응 필요없음)
-					sql = 'UPDATE user SET game_count = game_count+1 where pk=?';
-					factor = [user_pk];
+					sql = 'UPDATE user SET game_count = game_count+1 where naver_id=?';
+					factor = [naver_id];
 					query = connection.query(sql, factor, function(err, rows){
 						if(err) throw err;
 						res.json( responseData );

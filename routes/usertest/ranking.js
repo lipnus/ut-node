@@ -26,7 +26,7 @@ router.get('/', function(req, res){
 
 router.post('/', function(req,res){
 
-	let user_pk = req.body.user_pk;
+	let naver_id = req.body.naver_id;
 
 	//유저데이터를 점수에 따라 출력
 	var sql = 'SELECT * FROM `user` WHERE 1 ORDER BY score DESC';
