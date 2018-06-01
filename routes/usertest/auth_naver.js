@@ -17,10 +17,10 @@ var connection = mysql.createConnection({
 connection.connect();
 
 var nodePath = "http://ec2-13-125-247-189.ap-northeast-2.compute.amazonaws.com:9000";
-// var angularPath = "http://lipnus.com/#/";
+var angularPath = "http://lipnus.com/#/";
 
 // var nodePath = "http://localhost:9000/";
-var angularPath = "http://localhost:4200/#/";
+// var angularPath = "http://localhost:4200/#/";
 
 
 
@@ -135,15 +135,6 @@ function getUserInfo(req, res, state, token){
 	});//get호출
 
 }
-
-
-
-
-
-
-
-
-
 
 
 
